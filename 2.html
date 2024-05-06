@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community</title>
+    <style>
+        /* 样式代码同上 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* 用户资料样式 */
+        .userProfile {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        /* 输入框和按钮样式 */
+        input[type="text"],
+        textarea {
+            width: calc(100% - 10px);
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #007BFF;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* 帖子样式 */
+        .post {
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .tags {
+            margin-top: 10px;
+        }
+
+        .tag {
+            background-color: #007BFF;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin-right: 5px;
+        }
+
+        /* 搜索样式 */
+        .search {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* 响应式调整 */
+        @media only screen and (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+
+            input[type="text"],
+            textarea {
+                width: 100%;
+            }
+        }
+        /* 固定在底部 */
+        .shareContainer {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+            display: none;
+        }
+
+        .shareContainer.active {
+            display: block;
+        }
+
+        /* 居中 */
+        .sharedPostContainer {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+            display: none;
+        }
+
+        .sharedPostContainer.active {
+            display: block;
+        }
+        .search {
+            margin-bottom: 20px;
+        }
+
+        #searchInput {
+            width: 70%;
+            padding: 8px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        #searchBtn {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #postForm {
+            margin-bottom: 20px;
+        }
+
+        #postContent {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        #postTags {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        #postForm button {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Community</h1>
+
+        <!-- 搜索 -->
+        <div class="search">
+            <input type="text" id="searchInput" placeholder="Search posts...">
+            <button id="searchBtn">Search</button>
+        </div>
+
+        <!-- 用户资料 -->
+        <div class="userProfile">
+            <h2>User Profile</h2>
+            <p>Username: JohnDoe</p>
+            <p>Email: johndoe@example.com</p>
+        </div>
+
+        <!-- Posts Container -->
+        <div id="postsContainer"></div>
+
+        <!-- 帖子发布 -->
+        <form id="postForm">
+            <textarea id="postContent" rows="3" placeholder="Share something..."></textarea><br>
+            <input type="text" id="postTags" placeholder="Tags (comma separated)">
+            <button type="submit">Post</button>
+        </form>
+    </div>
+
+    <!-- 分享容器 -->
+    <div class="shareContainer" id="shareContainer">
+        <p>Share this post:</p>
+        <button id="shareFacebook">Facebook</button>
+        <button id="shareTwitter">Twitter</button>
+        <button id="shareWhatsApp">WhatsApp</button>
+    </div>
+
+    <!-- 分享的帖子容器 -->
+    <div class="sharedPostContainer" id="sharedPostContainer">
+        <!-- 这里将动态生成分享的帖子内容 -->
+    </div>
+
+    <script>
+        function createPost(content) {
+            const postDiv = document.createElement('div');
+            postDiv.className = 'post';
+            postDiv.innerHTML = `
+                <p>${content}</p>
+                <button class="likeBtn">Like</button>
+                <button class="commentBtn">Comment</button>
+                <div class="commentsContainer"></div>
+                <form class="commentForm">
+                    <input type="text" class="commentInput" placeholder="Write a comment...">
+                    <button type="submit">Post</button>
+                </form>
+            `;
+            document.getElementById('postsContainer').appendChild(postDiv);
+        }
+
+        document.getElementById('postForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const postContent = document.getElementById('postContent').value;
+            createPost(postContent);
+            document.getElementById('postContent').value = '';
+        });
+
+        document.addEventListener('submit', function(event) {
+            if (event.target.classList.contains('commentForm')) {
+                event.preventDefault();
+                const commentInput = event.target.querySelector('.commentInput').value;
+                const commentsContainer = event.target.previousSibling;
+                const commentDiv = document.createElement('div');
+                commentDiv.className = 'comment';
+                commentDiv.textContent = commentInput;
+                commentsContainer.appendChild(commentDiv);
+                event.target.querySelector('.commentInput').value = '';
+            }
+        });
+
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('likeBtn')) {
+                const likeBtn = event.target;
+                likeBtn.textContent = likeBtn.textContent === 'Like' ? 'Liked' : 'Like';
+                likeBtn.style.backgroundColor = likeBtn.textContent === 'Liked' ? '#17a2b8' : '#007BFF';
+            }
+        });
+    </script>
+</body>
+</html>
